@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<script type="application/json" id="cowork-artifact-meta">
+{
+  "name": "Industry Intel Dashboard",
+  "schemaVersion": 1,
+  "description": "æ¸å­å»£åç¢æ¥­æå ±åè¡¨æ¿ï¼æ¯é±ä¸è³é±äº 08:00 èªåæ´æ°ï¼æ´çä»£çåææ¾è¶¨å¢ã591/100/8891/518 å°æç¢æ¥­åæï¼æ¿å¸ãè»å¸ãäººåãå®¤è¨­ï¼ãè Meta/Google/TikTok å¹³å°æ¿ç­ãæ¯å¼µå¡çéãå°æ¥­åçæç¾©ãä¸å¥è©±ï¼å¯ç´æ¥è¤è£½ä½¿ç¨ã"
+}
+</script>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<title>æ¸å­å»£åç¢æ¥­æå ±åè¡¨æ¿</title>
+<style>
+:root {
+  color-scheme: light;
+  --bg: #f7f8fa;
+  --card-bg: #ffffff;
+  --border: #e4e7ec;
+  --text: #1a1d23;
+  --text-muted: #5a6271;
+  --accent: #1f5fbf;
+  --accent-soft: #eaf2ff;
+  --tag-ad: #e0eaff;
+  --tag-ad-text: #1f5fbf;
+  --tag-house: #ffe9d6;
+  --tag-house-text: #b85a00;
+  --tag-car: #d6f0e4;
+  --tag-car-text: #1f7a4d;
+  --tag-job: #f3e0ff;
+  --tag-job-text: #7a3fb5;
+  --tag-design: #ffe5ec;
+  --tag-design-text: #b53b65;
+  --tag-global: #d8eef5;
+  --tag-global-text: #1c6486;
+  --highlight-bg: #fff8e1;
+  --highlight-border: #f4c945;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: -apple-system, "Microsoft JhengHei", "PingFang TC", sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+}
+.wrap { max-width: 1080px; margin: 0 auto; padding: 24px 20px 80px; }
+header.top {
+  display: flex; justify-content: space-between; align-items: flex-end;
+  flex-wrap: wrap; gap: 12px;
+  border-bottom: 2px solid var(--accent); padding-bottom: 14px; margin-bottom: 18px;
+}
+header.top h1 { margin: 0; font-size: 22px; letter-spacing: 0.5px; }
+header.top .sub { color: var(--text-muted); font-size: 13px; margin-top: 4px; }
+header.top .updated {
+  background: var(--accent-soft); color: var(--accent);
+  padding: 6px 12px; border-radius: 6px; font-size: 13px; font-weight: 600;
+}
+
+/* Highlights */
+.highlights {
+  background: var(--highlight-bg); border-left: 4px solid var(--highlight-border);
+  padding: 14px 18px; border-radius: 6px; margin-bottom: 22px;
+}
+.highlights h2 { margin: 0 0 8px; font-size: 15px; color: #8a6300; }
+.highlights ul { margin: 0; padding-left: 20px; }
+.highlights li { margin: 4px 0; font-size: 14px; }
+
+/* Tabs */
+.tabs {
+  display: flex; gap: 4px; flex-wrap: wrap;
+  border-bottom: 1px solid var(--border); margin-bottom: 18px;
+}
+.tab {
+  background: none; border: none; padding: 10px 16px; cursor: pointer;
+  font-size: 14px; font-weight: 600; color: var(--text-muted);
+  border-bottom: 2px solid transparent; font-family: inherit;
+  transition: all 0.15s;
+}
+.tab:hover { color: var(--text); }
+.tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+.tab .count {
+  display: inline-block; background: var(--border); color: var(--text-muted);
+  border-radius: 10px; padding: 1px 7px; font-size: 11px; margin-left: 5px;
+}
+.tab.active .count { background: var(--accent-soft); color: var(--accent); }
+
+/* Panels */
+.panel { display: none; }
+.panel.active { display: block; }
+.panel-intro {
+  font-size: 13px; color: var(--text-muted); margin-bottom: 16px;
+  background: var(--card-bg); padding: 12px 14px; border-radius: 8px;
+  border: 1px solid var(--border);
+}
+
+/* Cards */
+.card {
+  background: var(--card-bg); border: 1px solid var(--border);
+  border-radius: 10px; padding: 16px 18px; margin-bottom: 12px;
+}
+.card-head { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 8px; }
+.tag {
+  font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 4px;
+  white-space: nowrap; flex-shrink: 0;
+}
+.tag-ad { background: var(--tag-ad); color: var(--tag-ad-text); }
+.tag-house { background: var(--tag-house); color: var(--tag-house-text); }
+.tag-car { background: var(--tag-car); color: var(--tag-car-text); }
+.tag-job { background: var(--tag-job); color: var(--tag-job-text); }
+.tag-design { background: var(--tag-design); color: var(--tag-design-text); }
+.tag-global { background: var(--tag-global); color: var(--tag-global-text); }
+.card-title { font-weight: 600; font-size: 15px; line-height: 1.4; }
+.card-meta { font-size: 12px; color: var(--text-muted); margin-bottom: 8px; }
+.card-summary { font-size: 14px; color: var(--text); margin-bottom: 10px; }
+.card-insight {
+  background: var(--accent-soft); border-left: 3px solid var(--accent);
+  padding: 8px 12px; border-radius: 4px; font-size: 13px; margin-bottom: 8px;
+}
+.card-insight b { color: var(--accent); }
+.card-link a {
+  color: var(--accent); text-decoration: none; font-size: 13px;
+}
+.card-link a:hover { text-decoration: underline; }
+.card-link a::after { content: " â"; }
+
+footer.bottom {
+  margin-top: 30px; padding-top: 16px; border-top: 1px solid var(--border);
+  font-size: 12px; color: var(--text-muted); text-align: center;
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="top">
+  <div>
+    <h1>æ¸å­å»£åç¢æ¥­æå ±åè¡¨æ¿</h1>
+    <div class="sub">ä»£çåææ¾è¶¨å¢ Ã å®¢æ¶ç¢æ¥­åæ Ã åéå»£åå¹³å°</div>
+  </div>
+  <div class="updated">æå¾æ´æ°ï¼2026/05/05ï¼é±äºï¼</div>
+</header>
+
+<div class="highlights">
+  <h2>æ¬é±æ¥­åå¿ç Â· Top 5</h2>
+  <ul>
+    <li><b>4æå°ç£è»å¸æç 3.14 è¬è¼ï¼ææ¸ 20%ï¼è±ªè¯è»æ´ -43%</b> â æ¥åæ·¡å­£éæï¼ä½æ¥­èé ä¼° 5 æåå½è³ 3.3 è¬è¼ã8891 å®¢æ¶éè¦ãå½æ§æé ç®ãè¨­è¨ï¼ä¸»åææ·¡æºå­£æ¹æ¡æ¯çºç´çééµå·®ç°ã</li>
+    <li><b>æ¿å¸ä¸é½ 10 åè¡æ¿ååºç¾ãæ¿å¹åæã</b> â é å®å±æ¯æ°æå±éä¾¿å®ï¼å°åä¸­æ­£ææé¡¯ï¼æ¯åªå·® 18 è¬ï¼ãæ¡å ´ä¸»å»£åéæ±åèä¸åï¼ä½ææ¡è¦å¼·èª¿ãç²¾æºå¹éåéè²·æ¹ãï¼èéå¤§é¢ç©æåã</li>
+    <li><b>Meta Andromeda AI å»£åç³»çµ±ä¸ç·</b> â ä¸åå»£åç´ æèªåçææ¸ç¾çæ¬ï¼ä»£çååµæéæª»éä½ï¼ä½åç´åªé«ï¼591/100/8891/518ï¼çç²¾æºåç¾ä»æ¯ AI ç¡æ³æ¿ä»£çæ ¸å¿ã</li>
+    <li><b>104 é æ 2026 æ´é«èª¿èª 4.5%ï¼1111 Q1 èª¿æ¥ä¼æ¥­å èª 4.1%ã44% æå¾µæéæ±</b> â éå¹³å°æ¸æå±åç¢ºèªæ¶äººæ½®æå½¢ï¼518 å»£åç¾å¨æ¯å°çæéé»æ¾ä¼æ¥­å®¢æ¶ã</li>
+    <li><b>TikTok æ°ææèæ¿ç­å¼ç¼å¤§è¦æ¨¡ç¨æ¶åå½</b> â æ°æ¢æ¬¾è®æ¸åç¨æ¶å®£ç¨±èæ®é¢éãç¤¾ç¾¤å»£åæ¿å¡å¯è½éçµï¼æ¬ååªé«ãç©©å®å¯é ãè«è¿°çæ©æä¾äºã</li>
+  </ul>
+</div>
+
+<div class="tabs">
+  <button class="tab active" data-tab="ad">å»£åç¢æ¥­<span class="count">5</span></button>
+  <button class="tab" data-tab="house">æ¿å¸ (591)<span class="count">4</span></button>
+  <button class="tab" data-tab="car">è»å¸ (8891)<span class="count">5</span></button>
+  <button class="tab" data-tab="job">äººå (518)<span class="count">4</span></button>
+  <button class="tab" data-tab="design">å®¤è¨­ (100)<span class="count">4</span></button>
+  <button class="tab" data-tab="global">åéå¹³å°<span class="count">4</span></button>
+</div>
+
+<!-- å»£åç¢æ¥­ -->
+<div class="panel active" data-panel="ad">
+<div class="panel-intro">ä»£çåï¼å¥å®ãå½¥æãå¥§ç¾ãå±çµ¡ãç¾¤éãè²ç«å¾·ç­ï¼å¹«å®¢æ¶ææ¾çè¶¨å¢ååï¼ä»¥åå»£åç¢æ¥­æ´é«è®åã</div>
+
+<div class="card">
+  <div class="card-head"><span class="tag tag-ad">ç¢æ¥­è¶¨å¢</span><div class="card-title">2026 äºå¤§è¡é·è¶¨å¢ï¼AI å¨é¢æ»²éãRMN çç¼ãåµä½èç¶æ¿ãææ·å¯¦é©</div></div>
+  <div class="card-meta">ä¾æºï¼å°åå¸å»£åä»£çåæ¥­åæ¥­å¬æ (TAAA) Ã Kantar 2026 é æ¸¬</div>
+  <div class="card-summary">24% $½¿ç¨èå·²éå§ä¾è³´ AI è³¼ç©å©çï¼è¶é 70% $¿¡ä»»å¶æ¨è¦ï¼é¶å®åªé« (RMN) å»£åææ¾æææ¯ä¸è¬æ¸ä½å»£å 1.8 åãè³¼è²·æé¡æåè¿ 3 åï¼61% è¡é·äººè¨ç« 2026 å¹´å¢å åµä½èå§å®¹æè³ï¼è½å¿«éå æå¸å ´è®åçä¼æ¥­çæ¶æé·çé« 35%ã</div>
+  <div class="card-insight"><b>å°æ¥­åçæç¾©ï¼</b>591 ç«å§å»£åæ¬è³ªå°±æ¯ãæ¿ç¢åç´ RMNãï¼éç¯å ±åæ¯æåæå¼·çå°å¤è«è¿°ãä¸æ¬¡ææ¡ç´æ¥å¼ç¨ãRMN æææ¯ä¸è¬æ¸ä½å»£å 1.8 åãï¼æ 591 ç«å§å»£åå®ä½ææ¡å ´ä¸»ç RMN è§£æ±ºæ¹æ¡ã</div>
+  <div class="card-link"><a href="https://www.taaa.org.tw/news/article/9587" target="_blank">TAAAï¼2026 äºå¤§è¶¨å¢æ¶æ»è¡é·æ°å±</a></div>
+</div>
+
+<div class="card">
+  <div class="card-head"><span class="tag tag-ad">åªé«è¶¨å¢</span><div class="card-title">RMN å¨çè¦æ¨¡ 1,742 åç¾åï¼2026 å¹´å°è¶è¶å³çµ±é»è¦</div></div>
+  <div class="card-meta">è³æä¾æºï¼Kantar / TAAA 2026 æ´ç</div>
+  <div class="card-summary">é¶å®åªé«æ­£æçºå¨çå»£åæè³çééµåè½ãææ¾ææç´ä¸è¬æ¸ä½å»£å 1.8 åï¼å¨æåè³¼è²·æé¡è¡¨ç¾ä¸å·åè¿ 3 åææãä»£çåå¹«å®¢æ¶æ¡è²·åªé«æï¼RMN å·²æ¯å¿æåé ã</div>
+  <div class="card-insight"><b>å°æ¥­åçæç¾©ï¼</b>æ¸å­å»£åæ¬è³ªæ¯ãåç´æµé RMNãï¼æ¿ç¢+å®¤è¨­+æ±½è»+äººåï¼ï¼æåéè¦æéåæäºè¬æ¸æ¥ â æåä¸æ¯ãç«å§å»£åçä½ãï¼æåæ¯ãåååç´ç¢æ¥­ç RMN æ´åæ¹æ¡ãã</div>
+</div>
+
+<div class="card">
+  <div class="card-head"><span class="tag tag-ad">ä»£çååå</span><div class="card-title">61% è¡é·äººå ç¢¼åµä½èé ç®ï¼å¾®ç¤¾ç¾¤ ROK æ¯å¹³åé« 25%</div></div>
+  <div class="card-meta">è³æå°æï¼å¥§ç¾ãå±çµ¡ãç¾¤éãè²ç«å¾·ç­ä»£çå 2026 åªé«æ¡è²·éé»</div>
+  <div class="card-summary">2026 ç¤¾ç¾¤çæè½åãä¿¡ä»»ãèãçå¯¦äºåãçºæ ¸å¿ï¼ä»£çåå¨å®¢æ¶ææ¡ä¸­æé¡¯å éåµä½èçµåï¼YouTubeãIGãTikTok ç­å½±é³ãKOC ç©é£ï¼ãå¾®ç¤¾ç¾¤ç¥è­åå¸³èç ROI å¯æ¯å¹³åé« 25%ã</div>
+  <div class="card-insight"><b>å°æ¥­åçæç¾©ï¼</b>å®¢æ¶ç«¯å¦æåæ ãä»£çåä¸ç´æ¨ KOL/KOCãï¼æåå¯ç¨ãä½ KOL æµéä¸æçä¸ãç¡æ³åè¡é·ãåæï¼ä¸»æ¨ 591/100/8891 ç«å§ + åè¡é·çãèªææµéæ²æ¾±ãå¹å¼ã</div>
+</div>
+
+<div class="card">
+  <div class="card-head"><span class="tag tag-ad">ææ¾çµæ§</span><div class="card-title">ãç­é±æå¿«æ¸¬ãæä¸»æµï¼ææ·å¯¦é©ä¼æ¥­çæ¶æé·çé« 35%</div></div>
+  <div class="card-meta">è³æä¾æºï¼Kantar 2026 é æ¸¬ / TAAA æ´ç</div>
+  <div class="card-summary">è½å¿«éå æå¸å ´è®åçä¼æ¥­çæ¶æé·çé« 35%ï¼å»£åææ¾ä¸ä»£çåå¾åãå°æ¹éãå¤çæ¬ãå¿«æ¸¬å¿«æ¶ããå³çµ±ä¸åæä¸å campaign çç©æ³è¶ä¾è¶å°ï¼åçå¿é å°å¯¦é©ç²¾ç¥å§åçºæ¥å¸¸ã</div>
+  <div class="card-insight"><b>å°æ¥­åçæç¾©ï¼</b>å»ºè­°ææ¹é·å®å¥é¤éæ°ååï¼æä¾ãç­é±ææ¸¬è©¦åãï¼2-4 é±ï¼+ãä¸»åæ¾å¤§åãï¼4-12 é±ï¼å©æ®µå¼ç¢åï¼ç¬¦åä»£çåèå®¢æ¶ç¾å¨çæ±ºç­éè¼¯ã</div>
+</div>
+
+<div class="card">
+  <div class="card-head"><span class="tag tag-ad">AI å»£å</span><div class="card-title">2026 å¨çæ¸ä½å»£åï¼AI å¾è¼å©å·¥å·åçºæ ¸å¿å¼æï¼åçè¥ç¼ºå¸­ AI æ¨è¦å°å¤±å»è½è¦åº¦</div></div>
+  <div class="card-meta">ä¾æºï¼vocus.cc / 2026 å¨çæ¸ä½å»£åè¶¨å¢é æ¸¬</div>
+  <div class="card-summary">2026 å¹´ AI é©åæå°ãåçå»ºè¨­èåµæç¢åºå·²æä¸»æµã24% ä½¿ç¨èä¾è³´ AI è³¼ç©å©çï¼åçè¥ç¡æ³èºèº«æ¼ç®æ³ãé è¨­å»ºè­°ãï¼æ¸ä½æåå°å¿«éèç¸®ã</div>
+  <div class="card-insight"><b>å°æ¥­åçæç¾©ï¼</b>591/100/8891/518 çç©ä»¶æè¿°ãææ¡èçµæ§åè³ææ¯å¦è¢« AI æ¨¡åååç´¢å¼ï¼å°ç´æ¥å½±é¿æ¡å ´ä¸»å¨ AI æä»£çæåãå¯ç¼å±ãAI ååæååªåãä½çºå å¼æååå¥é»ã</div>
+  <div class="card-link"><a href="https://vocus.cc/article/69435be7fd897800016c1072" target="_blank">2026 å¨çæ¸ä½å»£åè¶¨å¢é æ¸¬</a></div>
+</div>
+</div>
+
+<!-- æ¿å¸ -->
+<div class="panel" data-panel="house">
+<div class="panel-intro">591 æ¿å±äº¤æç¶²æå¨çæ¿å°ç¢å¸å ´åæï¼å½±é¿æ¡å ´å»£åé ç®èå®¢æ¶ææ¡éè¼¯ã</div>
+
+<div class="card">
+  <div class="card-head"><span class="tag tag-house">å¸å ´ç°å¸¸</span><div class="card-title">ä¸é½ 10 åè¡æ¿ååºç¾ãæ¿å¹åæãï¼é å®å±æ¯æ°æå±ä¾¿å®</div></div>
+  <div class="card-meta">ä¾æºï¼591 å¯¦å¹ç»é / ç¶æ¿æ¥å ± | 2026/05 ææ°</div>
+  <div class="card-summary">æ ¹æ 591 å¯¦å¹ç»éçµ±è¨ï¼å¤®è¡ç¬¬$¸æ³¢ä¿¡ç¨ç®¡å¶å¯¦æ½å«åæå¾ï¼ä¸é½å·²æ 10 åè¡æ¿ååºç¾æ¿å¹åæãå°åå¸ä¸­æ­£åææé¡¯ï¼æ°æå±æ¯åª 142.9 è¬ï¼é å®å±æ¯åª 124.5 è¬ï¼ä¸åªå·®äº 18 è¬åã</div>
+  <div class="card-insight"><b>å°æ¥­åçæç¾©ï¼</b>åæç¾è±¡èªªææ¡å ´ä¸»å®å¹æ­£é¢è¨å£åï¼å»£åé ç®æªå¿èç¸®ï¼æ¥æ¼å»ååèè¦æï¼ãææ¡éé»å¾ãæé«è©¢åéãè½åãç²¾æºå¹éçå¯¦è³¼å±æåè²·æ¹ãï¼591 åå®åç¢åææèªªæåã</div>
+  <div class="card-link"><a href="https://money.udn.com/money/story/5621/8714834" target="_blank">ç¶æ¿æ¥å ±ï¼ä¸é½ 10 åæ¿å¹åæ</a></div>
+</div>
+
+<div class="card">
+  <div class="card-head"><span class="tag tag-house">æäº¤åæ</span><div class="card-title">591 ç¤¾åæäº¤æ¦ææ°æ´æ° 2026-05-02ï¼å¯¦å¹ç»é 3 æè³æå·²ä¸ç·</div></div>
+  <div class="card-meta">ä¾æºï¼591 å¯¦å¹ç»éå¹³å° | æ´æ°æ¥ï¼2026-05-02</div>
+  <div class="card-summary">591 å¯¦å¹ç»é 2026 å¹´ 3 ææäº¤è³æå·²å¬éï¼ç¤¾åæäº¤æ¦æçºæ´æ°ãè³ææ¯åå¤©æ´æ°ä¸æ¬¡ï¼å¯åæäº¤ç±åº¦å°æ¯åç¸£å¸ã</div>
+  <div class="card-insight"><b>å°æ¥­åçæç¾©ï¼</b>æ¥­åå¯ç¨ 591 å¯¦å¹ç»éç±åº¦æ¸æåå®¢æ¶ææ¡ä½è­ï¼ä¾å¦ãä½ çæ¡å ´æå¨ååè¿ä¸åææäº¤åéãï¼è®å»£åææ¾å»ºè­°ææ¸å­åºç¤èéæè¦ºã</div>
+  <div class="card-link"><a href="https://market.591.com.tw/rank?rankType=deal" target="_blank">591 å¯¦å¹ç»éç¤¾åæäº¤æ¦</a></div>
+</div>
+
+<div class="card">
+  <div class="card-head"><span class="tag tag-house">å¸å ´å±æ</span><div class="card-title">2026 æ¿å¸ãå¹ç·©è·ãéç¤æ´ãï¼åéåè·å¹ 3-5%ãä¾çµ¦å£ååæé¾ 7%</div></div>
+  <div class="card-meta">ä¾æºï¼æ°¸æ¶æ¿ç¢éå / ä¸­ä¿¡æ¿å± 2026 Q1 å±æ</div>
+  <div class="card-summary">æ°¸æ¶/ä¸­ä¿¡é æ 2026 Q1 åæ§éæ±åæ¿å¹å¹´è·å¹ç´ 3-5%ï¼ä¾çµ¦å£åè¼é«ååè·å¹å¯è½æ´å¤§è³ 5-7%ãå¨å¹´äº¤æéä¼° 25.1-26.4 è¬æ£ï¼è¼ 2025 å¹´ -3% è³ +2%ã</div>
+  <div class="card-insight"><b>å°æ¥­åçæç¾©ï¼</b>æ¡å ´å»åå£åä¸å â å»£åéæ±å¶å¯¦æå¢å ï¼ä¸æä¸è³£ï¼ãææ¡éé»å¾ãæåè©¢åéãè½åãç²¾æºå¹éåé + éå®çå±åå®ãã</div>
+</div>
+
+<div class="card">
+  <div class="card-head"><span class="tag tag-house">ä¾çµ¦å£å</span><div class="card-title">2026-2028 å°æ 32-36 è¬æ¶æ°å±å®å·¥ï¼å»åå£åæµ®ç¾</div></div>
+  <div class="card-meta">ä¾æºï¼å°ç¢é±å ± / æ¥­ççµ±è¨</div>
+  <div class="card-summary">æªä¾ 1-2 å¹´é¸çºéåºæ°å±ä¾çµ¦ï¼å¤®è¡å©çé£ 7 å­£æåµä¸åï¼å¸å ´å·æ·¡å»¶çºè³ 2026ãæ¿å¸åæç¾è±¡å ä¸ä¾çµ¦å£åï¼æ´é«å»åé£åº¦å°ä¸åã</div>
+  <div class="card-insight"><b>å°æ¥­åçæç¾©ï¼</b>æ°æ¡æ¨æ¡æ¸æå¢å ï¼ä½æ¯æ¡è¡é·é ç®å¯è½ä¸ä¿®ãææ¡éå¼·èª¿ãå®ä½ç²å®¢ææ¬ (CPL)ãèéå®ç´æåï¼591 åå®åç¢åï¼çå±é ç´ãå¯¦å¹è©¢åï¼æ¯ banner æ´æç«¶ç­åã</div>
+</div>
+</div>
+
+<!-- è»å¸ -->
+<div class="panel" data-panel="car">
+<div class="panel-intro">8891 æ±½è»å»£åæå¨çæ°è»å¸å ´åæã</div>
+
+<div class="card">
+  <div class="card-head"><span class="tag tag-car">ð ææ°æ¸æ</span><div class="card-title">4 ææ°è»æç 3.14 è¬è¼ï¼ææ¸ 20%ï¼è±ªè¯è»æ´è¡°é 43%</div></div>
+  <div class="card-meta">ä¾æºï¼PChome ä¸­å¤®ç¤¾ / èªç±é»å­å ±æ±½è» | å ±å°æ¥ï¼2026-05-04ï¼æ¨æ¥ï¼</div>
+  <div class="card-summary">4 æå°ç£æ°è»æç 31,407 è¼ï¼è¼ 3 æè¡°é 20.1%ï¼è¼é ä¼° 3.4 è¬è¼ä½ãæ¥å+æ·¡å­£å¤¾æï¼è±ªè¯è»å¾ 1.1 è¬è¼å¤§è·è³ 6,396 è¼ï¼-43.2%ï¼ãå 6 æ¬¾è»åç ´åé·éãå 4 æç´¯è¨ 12.78 è¬è¼ï¼å¹´æ¸ 3.7%ã</div>
+  <div class="card-insight"><b>å°æ¥­åçæç¾©ï¼</b>è±ªè¯è» -43% æ¯è­¦è¨ï¼éäºåçå»£åä¸»é ç®å¯è½ç¸®æãä½ 5 ææ¥­èé ä¼°åå½è³ 3.3 è¬è¼ï¼ç¾å¨æ¯ä¸»åæè¨ª 8891 å®¢æ¶ãæ¨ã5æè¡éæ¹æ¡ãçæä½³ææ©ã</div>
+  <div class="card-link"><a href="https://news.pchome.com.tw/finance/cna/20260504/index-17778716741162418003.html" target="_blank">ä¸­å¤®ç¤¾ï¼4 ææ°è»æç 3.14 è¬è¼</a></div>
+</div>
+
+<div class="card">
+  <div class="card-head"><span class="tag tag-car">ð ææ°æ¸æ</span><div class="card-title">TOYOTA + LEXUS åè¨å¸å  39.6%ï¼åæ³°ç¨±é¸ 6 å¸­</div></div>
+  <div class="card-meta">ä¾æºï¼ETtoday è»é² | å ±å°æ¥ï¼2026-05</div>
+  <div class="card-summary">4 æ TOYOTA ç»é 10,305 è¼ï¼å¸å  32.8%ï¼ï¼LEXUS 2,144 è¼ï¼6.8%ï¼ï¼åæ³°éååè¨å¸å  39.6%ï¼é¸å é·å®æ¦å 6 åãHonda CR-V æç 0 è¼ï¼å åæ­¢æ¥å®ã</div>
+  <div class="card-insight"><b>å°æ¥­åçæç¾©ï¼</b>CR-V æ«åæ¥å®èªªæé Toyota åçæ­£å¨èª¿æ´ç­ç¥ï¼éäºåçåèæ¯éè¦å å¤§å»£åææ¾ç¶­æåçè²éçææ©ï¼æ¥­åå¯ä¸»åæè¨ª HondaãMazdaãFord ç­å°ç£ä»£çåã</div>
+  <div class="card-link"><a href="https://speed.ettoday.net/news/3159926" target="_blank">ETtodayï¼4 æ TOYOTA LEXUS è¯æé¸æ¦</a></div>
+</div>
+
+<div class="card">
+  <div class="card-head"><span class="tag tag-car">æä»½å±æ</span><div class="card-title">5 æè»å¸é ä¼°åå½è³ 3.3 è¬è¼ï¼è¼å»å¹´åææé· 3.4%</div></div>
+  <div class="card-meta">ä¾æºï¼ç¶æ¿æ¥å ± / è»æ¥­èä¼°ç® | 2026-05-04</div>
+  <div class="card-summary">æ¥­èé ä¼° 5 æå°ç£æ°è»å¸å ´ç»é 3.3 è¬è¼ï¼è¼ 2025 å¹´ 5 æ 3.19 è¬è¼æé· 3.4%ãå¤æ¬¾æ°è» 5 æå°ä¸å¸ï¼å ä¸æ¯è¦ªç¯ä¿é·åæº«ã</div>
+  <div class="card-insight"><b>å°æ¥­åçæç¾©ï¼</b>5 ææºå­£é æååï¼ç¾å¨ï¼5 æåï¼æ¯æä½³ææ¡æéé»ï¼ä¸»åæ¾ 8891 å®¢æ¶æ¨ãæ¯è¦ªç¯ + æ°è»ä¸å¸ãå»£åçµåï¼å¼·èª¿çè»ç±åº¦é«å³°ã</div>
+  <div class="card-link"><a href="https://money.udn.com/money/story/5612/9480493" target="_blank">ç¶æ¿æ¥å ±ï¼ä¼° 5 æ 3.3 è¬è¼</a></div>
+</div>
+
+<div class="card">
+  <div class="card-head"><span class="tag tag-car">å¹´åº¦é æ</span><div class="card-title">éç¨èè£è²¼å©å¤æ¯æï¼å¨å¹´è»å¸ä¼°åå° 44 è¬è¼æ°´æº</div></div>
+  <div class="card-meta">ä¾æºï¼åæ³°æ±½è» / è»è¼ç ç©¶æ¸¬è©¦ä¸­å¿ (ARTC) / éäº¨</div>
+  <div class="card-summary">2026 å¹´åºå£æçºè»å¸ä¸»åä¹ä¸ãè²¨ç©ç¨æ¢ä¾ä¿®æ³åºå®ãå°ç­éç¨éè³ 15%ãå¤æ¬¾æ°è»é¸çºä¸å¸ï¼å¨å¹´è»å¸ææåå° 44 è¬è¼ã</div>
+  <div class="card-insight"><b>å°æ¥­åçæç¾©ï¼</b>ã44 è¬è¼å¹´åº¦ç®æ¨ãæ¯å®¢æ¶é·å®ç KPIï¼æåå¯ä»¥å¹« 8891 å®¢æ¶æçè»ç±åº¦æ¸æå°æéåå¹´åº¦ç®æ¨ï¼åãçºäºéæ 44 è¬è¼ä½ åéè¦å¤å° 8891 æåãçéåå¹´ç´ææ¡ã</div>
+</div>
+
+<div class="card">
+  <div class="card-head"><span class="tag tag-car">åççµæ§</span><div class="card-title">é è»æ°å¢å 4 æäº¤ä»æ¸åé¡§ï¼é»åè»æ¿å¡æçºéæ´</div></div>
+  <div class="card-meta">ä¾æºï¼éäº¨ / Capital Futures | 2026-05-01</div>
+  <div class="card-summary">4 æä¸­åé è»æ°å¢åï¼æ¯äºè¿ªãçæ³ãå°éµ¬ç­ï¼äº¤ä»æ¸æé¸çºå¬å¸ï¼é»åè»æ´é«ç«¶ç­æ ¼å±æçºæ¼è®ãå°ç£å¸å ´é»åè»è²·æ°£äº¦ç¶­æå¼·åï¼å³çµ±æ²¹è»åçå¨æ·¡å­£æ¿å£æ´æé¡¯ã</div>
+  <div class="card-insight"><b>å°æ¥­åçæç¾©ï¼</b>å³çµ±æ²¹è»åçãéè¦æå»£åæè³£å¾åãçéè¼¯æç«ï¼8891 æä¸»å outreach åç¢/æ¥ç³»åçï¼ä¸­åæ¿è»/ä¼æï¼ï¼ä»åæ·¡å­£å»£åéæ±æé«ä¸ç¸å°è¼å°ç«¶ç­ã</div>
+</div>
+</div>
+
+<!-- äººå -->
+<div class="panel" data-panel="job">
+<div class="panel-intro">518 äººåéè¡æå¨çæ±è·èä¼æ¥­å¾µæå¸å ´åæã</div>
+
+<div class="card">
+  <div class="card-head"><span class="tag tag-job">ð ææ°èª¿æ¥</span><div class="card-title">1111 Q1 èª¿æ¥ï¼ä¼æ¥­å èª 4.1%ãç§æå»ºç¯é¤é£²é«çè£½é äºå¤§ç¼ºå·¥</div></div>
+  <div class="card-meta">ä¾æºï¼1111 äººåéè¡ 2026 ä¼æ¥­ Q1 å¾µæèª¿æ¥ | 2026 ææ°</div>
+  <div class="card-summary">2026 å¹´ç¬¬ä¸å­£ï¼ä¼æ¥­å¹³åèª¿èª 4.1%ã44% ä¼æ¥­å¦è¨ææé¡¯äººåç¼ºå£ï¼åºå±¤å·è¡äººåï¼46%ï¼èå°æ¥­æè¡äººæï¼32.5%ï¼æ¯ææ¥éè£å¼·çå©å¤§é¡åãäºå¤§ç¼ºå·¥ç¢æ¥­ï¼ç§ææ¥­ãå»ºç¯æ¥­ãé¤é£²ä½å®¿æ¥­ãé«çç§è­·æ¥­ãè£½é æ¥­ã</div>
+  <div class="card-insight"><b>å°æ¥­åçæç¾©ï¼</b>äºå¤§ç¼ºå·¥ç¢æ¥­æ¯ 518 æ¥­åæå®¢çåªååå®ãå¯éå°éäºå¤§ç¢æ¥­åãç¢æ¥­å°å±¬å¾µæå»£åæ¹æ¡ãï¼æ­éèé /ç½é å·®ç°åå®å¹ï¼Q2 æ¯é²å ´æè¨ªçæä½³ææ©ã</div>
+  <div class="card-link"><a href="https://happiness.1111.com.tw/coverage/12467733" target="_blank">1111ï¼2026 ä¼æ¥­ Q1 å¾µæå èªèª¿æ¥</a></div>
+</div>
+
+<div class="card">
+  <div class="card-head"><span class="tag tag-job">èªè³</span><div class="card-title">104 é æ 2026 æ´é«èª¿èª 4.5%ï¼åµæ­·å²æ°é«</div></div>
+  <div class="card-meta">ä¾æºï¼104 äººåéè¡ 2026 æ¶ææ»ç¥</div>
+  <div class="card-summary">2026 é ææ´é«èª¿èªå¹åº¦å°é 4.5%ï¼åµæ­·å²é«é»ï¼64% ä¼æ¥­è¨ç«èª¿èªãèªè³ç«¶ç­å åæå³ä¼æ¥­æ´éè¦ãå¿«éæ¾å°å°çäººãï¼å»£åææ¾æççéè¦æ§ä¸åã</div>
+  <div class="card-insight"><b>å°æ¥­åçæç¾©ï¼</b>èª¿èª 4.5% ä»£è¡¨ä¼æ¥­é¡ææè³æ¶äººï¼ç­æ¼å¾µæå»£åé ç®æä¸åç©ºéãå»ºè­°æ¨ã2026 æ¶ææºå­£æªæãæ¦å¿µï¼éå® Q1/Q3 å©åå¾µæå°å³°ï¼åæªæå¼å»£åçµåã</div>
+  <div class="card-link"><a href="https://ehr.104.com.tw/104ha_blog/news/2026-talent-acquisition-guide" target="_blank">104ï¼2026 æ¶ææ»ç¥ â èª¿èª 4.5%</a></div>
+</div>
+
+<div class="card">
+  <div class="card-head"><span class="tag tag-job">æ±è·è¶¨å¢</span><div class="card-title">èªè³ä¸­ä½æ¸ 38,507 åï¼ãè½è·æ¯å èªå¿«ãæ 2026 ä¸»è¦æ±è·å¿ç</div></div>
+  <div class="card-meta">åæä¾æºï¼äººåå¸å ´èªè³çµæ§è§å¯</div>
+  <div class="card-summary">2026 èªè³ä¸­ä½æ¸ 38,507 åï¼æ¯å¹³åæ¸å°å©è¬å¤ãèªè³æé·éä¸­å¨ç§æ/éèé ­é¨ç¢æ¥­ï¼å¤æ¸äººä»å¨åå°è¸æ­¥ããè½è·ç¦æ®ãé©åæ±è·è¡çºæ´»èºã</div>
+  <div class="card-insight"><b>å°æ¥­åçæç¾©ï¼</b>ãè½è·æ¯å èªå¿«ãçå¿çé©å 518 æµéå¢å ãåæä¹ä»£è¡¨è½è·é¡§åãè·æ¶¯è¦åç­åå®åç¢åæå¸å ´ç©ºéï¼å¯æ¨ä¼æ¥­å®¢æ¶ãç²¾æºè§¸éè½è·æåäººæãçåå®å»£åã</div>
+</div>
+
+<div class="card">
+  <div class="card-head"><span class="tag tag-job">ææ¬å£å</span><div class="card-title">åºæ¬å·¥è³èª¿æ¼²ï¼ä¸­å°ä¼æ¥­äººåææ¬å£åä¸åï¼è½åä½ææ¬é«æå¾µæ</div></div>
+  <div class="card-meta">ä¾æºï¼ååé¨ / äººåå¸å ´è§å¯</div>
+  <div class="card-summary">åºæ¬å·¥è³æä½æèª 28,590 åãæèª 190 åãé¤é£²ãé¶å®ãè£½é ç­ä¸­å°ä¼æ¥­äººåææ¬å£åä¸åï¼é¨åä¼æ¥­éå§è½å CPC/èªå©å¼å»£åéä½å¾µæææ¬ã</div>
+  <div class="card-insight"><b>å°æ¥­åçæç¾©ï¼</b>ä¸­å°ä¼æ¥­å¾µæé ç®è¢«å·¥è³ææ ï¼æ´é©åæ¨ 518ãä½ææ¬+é«æçãçèªå©å¼æ¹æ¡ï¼æ¯åå¥å³çµ±ç¢æ¥­ä¸­å°ä¼æ¥­çå¥½è§åº¦ã</div>
+</div>
+</div>
+
+<!-- å®¤è¨­ -->
+<div class="panel" data-panel="design">
+<div class="panel-intro">100 å®¤å§è¨­è¨æå¨çè£æ½¢èå±å®¶ç¾å­¸å¸å ´åæã</div>
+
+<div class="card">
+  <div class="card-head"><span class="tag tag-design">é¢¨æ ¼è¶¨å¢</span><div class="card-title">2026 è£ä¿®å¾ãè¦è¦ºè¡æãè½åãæç·å±é³´ãï¼æ°æ¥µç°¡ãä¾å¯ãèªç¶ç³»ä¸»å°</div></div>
+  <div class="card-meta">ä¾æºï¼100 å®¤å§è¨­è¨ / çååªå± / DECO TV | 2026 ææ°æ´ç</div>
+  <div class="card-summary">2026 ä¸»æµé¢¨æ ¼ï¼æ°æ¥µç°¡ï¼åè½+ç¾æ+æº«åº¦ï¼ãä¾å¯é¢¨ï¼ä¸å®ç¾/æéçè·¡ï¼æºèªæ¥æ¬ç¾å­¸ï¼ãèªç¶ç³»ï¼æ¨è³ªææ©æµç·ãæ³¢æµªå±é¢¨ãæ¹è/å¥¶è¶/æ©æ¬ç°è²ç³»ï¼ãæ´é«è²èª¿ä½å½©åº¦ãæçç©©å®ï¼å¼·èª¿æç·å±é³´èéè¦è¦ºè¡æã</div>
+  <div class="card-insight"><b>å°æ¥­åçæç¾©ï¼</b>100 ç«å»£åç´ æçãè²èª¿ãèãæ°åãæç´æ¥å½±é¿ææ¡çãå¯åå©è¨­è¨å¸«å®¢æ¶å»ºç«ãè²èª¿ä¸»é¡åãå»£åçä½ï¼èªç¶ç³» vs ä¾å¯ vs æ°æ¥µç°¡ï¼ï¼åé¢¨æ ¼åç¾ç²¾æºææ¾ã</div>
+  <div class="card-link"><a href="https://www.100.com.tw/article/11661" target="_blank">100 å®¤å§è¨­è¨ï¼2026 å±å®¶è£ä¿®è¶¨å¢æ´ç</a></div>
+</div>
+
+<div class="card">
+  <div class="card-head"><span class="tag tag-design">æ°¸çº</span><div class="card-title">æ°¸çºè¨­è¨æãæ¨éãï¼ä½ VOC å¡æ 2026 å¸ä½é 55%</div></div>
+  <div class="card-meta">ä¾æºï¼å½©ä»æ¼ä½å·¥å / 100 å®¤å§è¨­è¨ / æ¥­çå¸å ´ç ç©¶</div>
+  <div class="card-summary">å±ä¸»è¶ä¾è¶éæ³¨å¥åº·èå°çå±çï¼ç°ä¿å¡æãä½ç²éå»ºæãç¯è½è¨­è¨å¾å åé è®æåºæ¬è¦æ±ãé ä¼°å° 2026 å¹´ä½æ®ç¼æ§ææ©ç©ï¼VOCï¼å¡æå¨å¨åä½å®å¸å ´ç©¿éçé 55%ã</div>
+  <div class="card-insight"><b>å°æ¥­åçæç¾©ï¼</b>ãç¶ å»ºæ/å¥åº·å®ãæ¯ 100 å§å®¹è¡é·æ°é¡æãå¯æ¨ãæ°¸çºè¨­è¨å°æ¬ãå»£åçµåï¼è®ä¸»æ¨ç¶ å»ºæçè¨­è¨å¬å¸èåçåæå°å±¬æåä½ï¼éæéå³çµ±è¨­è¨å¸«çæ°å®¢ç¾¤ã</div>
+</div>
+
+<div class="card">
+  <div class="card-head"><span class="tag tag-design">æºæ§å®¶å±</span><div class="card-title">æºæ§å®¶å±é²å¥ãé±å½¢èåãéæ®µï¼è½æºç£æ§+å²è½æè£ä¿®æ°ç±é»</div></div>
+  <div class="card-meta">ä¾æºï¼å½©ä»æ¼ä½å·¥å / æ¥­çè¶¨å¢è§å¯ 2026</div>
+  <div class="card-summary">ä¸åè¿½æ±ç«æï¼æºæ§å®¶å±ä»¥æåæ¹å¼èå¥çæ´»åç·ãé»å¹éæ¢¯å¼èª¿æ¼²é©åå¸å ´ç¦é»å¾ãä¾¿å©æ§ãè½åãç¨é»ç£æ§+å²è½ãç¢åã</div>
+  <div class="card-insight"><b>å°æ¥­åçæç¾©ï¼</b>æºæ§å®¶å±å» åï¼æºè½ç§æãè½æºç®¡çï¼æ¯ 100 ç«çæ°åå®¢æ¶ï¼éå»ä»åå¯è½æç§æé¡åªé«ï¼ç¾å¨å¯ä»¥ç¨ãå®¤è¨­æ´åãè§åº¦åé² 100ï¼æå±éè¨­è¨å¸«çå»£åä¸»é¡åã</div>
+</div>
+
+<div class="card">
+  <div class="card-head"><span class="tag tag-design">å¸å ´é©å</span><div class="card-title">èå±ç¿»æ° + é«ææ¬ + æ°ä¸ä»£çæ§ï¼ä¸è¡åéé©åè£ä¿®å¸å ´çµæ§æé·</div></div>
+  <div class="card-meta">ä¾æºï¼100 å®¤å§è¨­è¨ / DECO TV</div>
+  <div class="card-summary">2025-2026 è£ä¿®å¸å ´åçµæ§æ§æé·ï¼èèæ¿å±ç¿»æ°åéï¼éåèç¤¾åå­éå¤§ï¼ãåç©æ/å·¥è³é«ææ¬æ¨åå·¥ç¨éæª»ãæ°ä¸ä»£å°å±ä½åè³ªççæ§è¿½æ±ã</div>
+  <div class="card-insight"><b>å°æ¥­åçæç¾©ï¼</b>ãèå±ç¿»æ°ãæ¯ 100 å»£åé«æäº¤çé¡æï¼æç¢ºéæ±+é ç®ç¢ºå®ï¼ãå»ºè­°æ¥­åéå® 30 å¹´ä»¥ä¸èç¤¾åå¯éçç¸£å¸ï¼éåä¸­æ­£/ä¿¡ç¾©/å¤§å®/å¤§åï¼ï¼åè¨­è¨å¬å¸ååè¯åææ¡ã</div>
+</div>
+</div>
+
+<!-- åé -->
+<div class="panel" data-panel="global">
+<div class="panel-intro">MetaãGoogleãTikTok ç­åéå»£åå¹³å°æ¿ç­èåè½æ´æ°ã</div>
+
+<div class="card">
+  <div class="card-head"><span class="tag tag-global">TikTok</span><div class="card-title">TikTok æ°ææèæ¿ç­å¼ç¼å¤§è¦æ¨¡ç¨æ¶åå½ï¼æ¸åç¨æ¶å®£ç¨±èæ®é¢å¹³å°</div></div>
+  <div class="card-meta">ä¾æºï¼Yahoo Tech / NewsNation | 2026 ææ°</div>
+  <div class="card-summary">TikTok æ°ææèä¸ç·å¾æ¨åºæ°æåæ¢æ¬¾èé±ç§æ¿ç­ï¼å¼ç¼å¤§æ¹ç¨æ¶ä¸æ»¿ãæ¸åç¨æ¶å¨ç¤¾ç¾¤è¡¨ç¤ºèæ®é¢é TikTokï¼å¬å¸å·²å¬éåæä½ç­è­°æçºã</div>
+  <div class="card-insight"><b>å°æ¥­åçæç¾©ï¼</b>TikTok ç¨æ¶æµå¤±è¥æçï¼å»£åä¸»åéå° TikTok çé ç®å¯è½è½ç§»ãéæ¯ãæ¬ååªé«ç©©å®å¯é ãä¸åå¹³å°æ¿ç­çªç¶è¡æãè«è¿°çå¥½ææ©ï¼ä¸æ¬¡ææ¡å¯ç´æ¥é»åºéåå°æ¯ã</div>
+  <div class="card-link"><a href="https://tech.yahoo.com/social-media/articles/tiktok-2026-policies-explained-why-172037227.html" target="_blank">Yahoo Techï¼TikTok 2026 æ°æ¿ç­å¼ç¼åå½</a></div>
+</div>
+
+<div class="card">
+  <div class="card-head"><span class="tag tag-global">TikTok</span><div class="card-title">TikTok 2026 åæ¶ Custom Identity å»£åé¸é ï¼åè¦éæª»å¤§å¹æå</div></div>
+  <div class="card-meta">ä¾æºï¼TikAdTools / Social Media Today | 2026</div>
+  <div class="card-summary">TikTok 2026 æ¿ç­è®æ´ï¼åæ¶ Custom Identityï¼å»£åä¸»ä¸é£çµå®æ¹å¸³èå³å¯ææ¾çé¸é ï¼ãå¼·åèº«ä»½é©è­ãAI å§å®¹è¦ç¯æ¶ç·ãShop è³£å®¶è¦ç¯è®å´ãåµä½èç´æ­å°å¤é£èè¯çµ¡è³è¨åæ­¥åéã</div>
+  <div class="card-insight"><b>å°æ¥­åçæç¾©ï¼</b>TikTok åè¦éæª»æé« â ä»£çåä½æ¥­ææ¬ä¸å â é¨åå®¢æ¶æåé ­æ¾ãè¦åç©©å®ãçæ¬ååªé«ãå¯ä½çºè«è¿°ï¼ãå¨ 591/100/8891/518ï¼ä½ ä¸æåå¤è¢«å¹³å°æ¹è¦ååéãã</div>
+  <div class="card-link"><a href="https://tikadtools.com/blog/tiktok-ads-policies/" target="_blank">TikTok Ads Policies 2026 å®æ´è§£æ</a></div>
+</div>
+
+<div class="card">
+  <div class="card-head"><span class="tag tag-global">Meta</span><div class="card-title">Meta Andromeda AI å»£åç³»çµ±ï¼ä¸åç´ æèªåçææ¸ç¾çæ¬</div></div>
+  <div class="card-meta">ä¾æºï¼DataSlayerï¼Meta Ads 2025-2026 å®æ´æ´æ°ç´é</div>
+  <div class="card-summary">Meta æ¨åº Andromeda å»£åç³»çµ±ï¼çµå Advantage+ Creative è AI å¼·ååè½ï¼ä¸åå»£åç´ æå¯èªåçææ¸ç¾åè®é«ãéå»çã6 åå»£åå»ºè­°ãå·²è¢«åæ¶ï¼é ­é¨å»£åä¸»æ¯çµå»£åçµåç¾æ¸¬è©¦ 10 è³ 50 åï¼å¼·èª¿çæ­£çåµæå¤æ¨£æ§ã</div>
+  <div class="card-insight"><b>å°æ¥­åçæç¾©ï¼</b>Meta AI å»£åè®ãå»£éææ¾ãææ¬æ´ä½ï¼ä½ç²¾æºåç´åç¾ï¼å¦ 591 æ¿å±çå±æã8891 çè»æï¼çä¸å¯æ¿ä»£æ§æ´é«ãææ¡éé»ï¼æåæç¬¬ä¸æ¹æ¸æï¼Meta ç AI æ²æã</div>
+  <div class="card-link"><a href="https://www.dataslayer.ai/blog/meta-ads-changes-2025-83-updates-that-changed-facebook-advertising-forever" target="_blank">Meta Ads 2025-2026 å®æ´æ´æ°è¨é</a></div>
+</div>
+
+<div class="card">
+  <div class="card-head"><span class="tag tag-global">å¥åº·å»£å</span><div class="card-title">Meta/Google/TikTok ä¸å¹³å° 2026 åæ­¥æ¶ç·å¥åº·é¡å»£åè¦ç¯</div></div>
+  <div class="card-meta">ä¾æºï¼Accelerated Digital Mediaï¼2026 å¥åº·å»£åæ¿ç­æå¼</div>
+  <div class="card-summary">ä¸å¤§å¹³å°å¨ 2026 å¹´ååæ­¥å å¼·å·è¡å¥åº·å»£åéå¶ï¼åæ¬ï¼Meta åç¨å«ææå¥åº·å±¬æ§ç Custom/Lookalike Audienceï¼TikTok éå¶é«çå¥åº·é¡å»£åçå°æµï¼Google å å¼·ææ¬æ¥é©ï¼å°æ¯ FCA ç­å¬éç£çè³æåº«ã</div>
+  <div class="card-insight"><b>å°æ¥­åçæç¾©ï¼</b>éèãå¥åº·é¡å®¢æ¶ï¼æ¿è²¸ãå£½éªãé«ç¾ï¼å¨ä¸å¤§å¹³å°ææ¾é£åº¦åæ­¥ä¸åï¼ä¸»å outreach éé¡å®¢æ¶æ¨ãæ¬ååªé«+åå®ç¢åæ¿ä»£æ¹æ¡ãï¼ææ©é»éå¸¸å¥½ã</div>
+  <div class="card-link"><a href="https://www.accelerateddigitalmedia.com/insights/guide-to-social-media-health-ad-restrictions-2026/" target="_blank">2026 ç¤¾ç¾¤åªé«å¥åº·å»£åéå¶æå¼</a></div>
+</div>
+</div>
+
+<footer class="bottom">
+  æ¬åè¡¨æ¿ç±æç¨ä»»åæ¯é±ä¸è³é±äº 08:00 èªåæ´æ° Â· æ¸å­å»£åç­ç¥ä»£çäºº Â· cash0727@gmail.com
+</footer>
+
+</div>
+
+<script>
+(function () {
+  var tabs = document.querySelectorAll('.tab');
+  var panels = document.querySelectorAll('.panel');
+  tabs.forEach(function (tab) {
+    tab.addEventListener('click', function () {
+      var target = tab.getAttribute('data-tab');
+      tabs.forEach(function (t) { t.classList.remove('active'); });
+      panels.forEach(function (p) { p.classList.remove('active'); });
+      tab.classList.add('active');
+      var panel = document.querySelector('.panel[data-panel="' + target + '"]');
+      if (panel) panel.classList.add('active');
+    });
+  });
+})();
+</script>
+
+</body>
+</html>
